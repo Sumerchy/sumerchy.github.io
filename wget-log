@@ -1,0 +1,11 @@
+--2022-12-27 09:36:58--  https://news.store.rambler.ru/img/28a2e2f57ab27859646da1e54feb3934?img-format=auto
+Resolving news.store.rambler.ru (news.store.rambler.ru)... 81.19.83.20
+Connecting to news.store.rambler.ru (news.store.rambler.ru)|81.19.83.20|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 65874 (64K) [image/jpeg]
+Saving to: ‘28a2e2f57ab27859646da1e54feb3934?img-format=auto’
+
+               28a2e2f57ab2785   0%[                                                    ]       0  --.-KB/s               28a2e2f57ab27859646da1e54feb39 100%[===================================================>]  64.33K  --.-KB/s    in 0.1s    
+
+2022-12-27 09:36:59 (523 KB/s) - ‘28a2e2f57ab27859646da1e54feb3934?img-format=auto’ saved [65874/65874]
+
