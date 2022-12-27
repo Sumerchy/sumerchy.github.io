@@ -1,6 +1,4 @@
-import {getNeighbors, isSubSet, difference} from "./helper.js"
-
-class Sentence
+export class Sentence
 {
 	constructor(cells, count)
 	{
@@ -19,21 +17,29 @@ class Sentence
 
 	known_mines()
 	{
-		//Возвращает ячейки, о которых известно, что они мины.
-		//--------------------------------Реализуйте самостоятельно-----------
+		if (this.cells.size == this.count)
+		   return new Set(this.cells);
+		else
+	    	return new Set();
+
 	}
 
 	known_safes()
 	{
-
+  if (this.count == 0)
+    return new Set(this.cells);
+    else
+    return new Set();
 		//Возвращает ячейки, о которых известно, что они безопасны.
 		//--------------------------------Реализуйте самостоятельно-----------
-		
+
 	}
 
 	mark_safe(cell)
 	{
-		//Обновляет внутреннее представление знаний, 
+		if (this.cells.has(cell))
+		this.cells.delete(cell)
+		//Обновляет внутреннее представление знаний,
 		//учитывая, что ячейка известна как безопасная.
 		//--------------------------------Реализуйте самостоятельно-----------
 
@@ -42,7 +48,13 @@ class Sentence
 
 	mark_mine(cell)
 	{
-		//Обновляет внутреннее представление знаний, 
+		if(this.cells.has(cell))
+		{
+		this.cells.delete(cell);
+		--this.count;
+		}
+
+		//Обновляет внутреннее представление знаний,
 		//учитывая, что ячейка изсвестна как мина.
 		//--------------------------------Реализуйте самостоятельно-----------
 	}
@@ -54,7 +66,7 @@ class Sentence
 		let set1 = this.cells;
 		let set2 = sentence2.cells;
 		let set3;
-		if(this.equal(sentence2)) 
+		if(this.equal(sentence2))
 			return 0;
 		else if(isSubSet(set1, set2))
 		{
@@ -80,18 +92,10 @@ export class MinesweeperAI
 		//Ширина и высота поля игры
 		this.dimension = dimension;
 
-		//Следит за тем, какие ячейки были нажаты 
+		//Следит за тем, какие ячейки были нажаты
 		this.moves_made = new Set();
 
 		//Следит за ячейками, которые считаются безопасными или минами
-		this.mines = new Set();
-		this.safes = new Set();
-		this.knowledge = [];
-	}
-
-	start()
-	{
-		this.moves_made = new Set();
 		this.mines = new Set();
 		this.safes = new Set();
 		this.knowledge = [];
@@ -116,9 +120,9 @@ export class MinesweeperAI
 				else
 				{
 					this.knowledge[i] = sent1;
-				} 
-			} 
-		} 
+				}
+			}
+		}
 	}
 
 	mark_safe(cell)
@@ -135,7 +139,7 @@ export class MinesweeperAI
 				if(this.knowledge[i].cells.size == 0 || this.has_sentence(sent1))
 				{
 					this.knowledge.splice(i, 1);
-					--i; 
+					--i;
 				}
 				else
 				{
@@ -155,22 +159,21 @@ export class MinesweeperAI
 		 * 1) пометить ячейку, как сделанный ход
 		 * 2) пометить ячейку, как безопасную, обновить все предложения базы знаний, которые содержат эту ячейку
 		 * 3) добавить новое предложение в базу знаний
-		 * на основе значений cell и count, предложение содержит только те ячейки, 
+		 * на основе значений cell и count, предложение содержит только те ячейки,
 		 * состояние которых не определено.
 		 * 4) пометить дополнительные ячейки как безопасные или как мины,
 		 * если это можно сделать на основе базы знаний ИИ.
 		 * 5) добавить новые предложения в базу знаний если они могут
 		 * быть выведены из существующих знаний.
 		 */
-		//--------------------------------Реализуйте самостоятельно-----------
-		try
-		{ 
-			// 1) помечает ячейку, как сделанный ход 
+
+		try{
+			// 1) помечает ячейку, как сделанный ход
 			this.moves_made.add(cell);
 			// 2) пометить ячейку, как безопасную, обновить все предложения базы знаний, которые содержат эту ячейку
-			this.mark_safe(cell); 
+			this.mark_safe(cell);
 			// 3) добавить новое предложение в базу знаний
-			// на основе значений cell и count, предложение содержит только те ячейки, 
+			// на основе значений cell и count, предложение содержит только те ячейки,
 			// состояние которых не определено.
 			this.add_sentence(cell, count);
 			// 4) пометить дополнительные ячейки как безопасные или как мины,
@@ -181,7 +184,6 @@ export class MinesweeperAI
 		{
 			console.log(error);
 		}
-
 	}
 
 
@@ -189,13 +191,12 @@ export class MinesweeperAI
 	make_safe_move()
 	{
 		/* Возвращает безопасную ячейку для выбора на поле Сапёра.
-		 * Ход должен быть известен как безопасный и ещё не был сделан. 
+		 * Ход должен быть известен как безопасный и ещё не был сделан.
 		 * Функция может использовать this.mines, this.safes, this.moves_made,
 		 * но не должна их изменять.
 		 */
-		//--------------------------------Реализуйте самостоятельно-----------
 		if(this.safes.size > 0)
-		{ 
+		{
 
 			let  move = [...difference(this.safes, this.moves_made)][0];
 			return move;
@@ -213,7 +214,6 @@ export class MinesweeperAI
 		 * 1) ещё не выбрали
 		 * 2) не известно, что это мины.
 		 */
-		//--------------------------------Реализуйте самостоятельно-----------
 		let board = [];
 		for(let l = 0; l < this.dimension * this.dimension; ++l) board.push(l);
 		let boardSet = new Set(board);
@@ -221,19 +221,17 @@ export class MinesweeperAI
 		boardSet = difference(boardSet, this.mines);
 		board = [...boardSet];
 		if(board.length > 0)
-		{ 
-			const index = Math.floor(Math.random() * board.length); 
+		{
+			const index = Math.floor(Math.random() * board.length);
 			return board[index];
-		}else 
+		}else
 			return undefined;
 	}
 
-	
-	
-//-------------добавил позже
 
-	add_sentence(cell, count) 	
-	//Добавляет предложение используя значение cell, count, учитывает только те ячейки, 
+
+	add_sentence(cell, count)
+	//Добавляет предложение используя значение cell, count, учитывает только те ячейки,
 	//состояние которых не определено
 	{
 		let s1 = new Sentence(getNeighbors(cell, this.dimension), count);
@@ -245,7 +243,7 @@ export class MinesweeperAI
 		{
 			s1.mark_safe(safe);
 		}
-		if(s1.cells.size > 0 && !this.has_sentence(s1)) 
+		if(s1.cells.size > 0 && !this.has_sentence(s1))
 			this.knowledge.push(s1);
 	}
 
@@ -297,3 +295,61 @@ export class MinesweeperAI
 }
 
 
+function getNeighbors(k, dimension)
+//находит множество соседних ячеек
+{
+	const i = index2row(k, dimension);
+	const j = index2col(k, dimension);
+	const neighbors = []
+	for(let k = i - 1; k < i + 2; ++k)
+	{
+		for(let l = j - 1; l < j + 2; ++l)
+		{
+			if(
+				(l === j && k === i) ||
+				l < 0 ||
+				l > (dimension -1) ||
+				k < 0 ||
+				k > (dimension - 1))
+				continue;
+			neighbors.push(rowCol2index(k,l, dimension));
+		}
+	}
+	return neighbors;
+}
+
+export function index2row(k, dimension)
+{
+	return Math.floor(k / dimension);
+}
+
+function index2col(k, dimension)
+{
+	return k % dimension;
+}
+
+function rowCol2index(k, l, dimension)
+{
+	return k * dimension + l;
+}
+
+function isSubSet(a, b)
+// Тест, что множество a есть подмножество множества b.
+{
+	if(a.size > b.size)
+		return false;
+	else
+	{
+		for(var elem of a)
+		{
+			if(!b.has(elem)) return false;
+		}
+		return true;
+	}
+}
+
+function difference(a, b)
+// Разность множеств. a без элементов b.
+{
+	return new Set([...a].filter(elem => !b.has(elem)));
+}
